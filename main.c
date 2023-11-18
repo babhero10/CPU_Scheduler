@@ -8,3 +8,11 @@
  * @copyright Copyright (c) 2023
  * 
  */
+
+#include <stdio.h>
+
+int main(void)
+{
+    printf("hi2\n");
+    return 0;
+}
