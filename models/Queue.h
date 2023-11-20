@@ -16,15 +16,27 @@
 #include "Process.h"
 
 /** Macro defintions **/
+#define QUEUE_ITEM_TYPE Process *
 
 /** Macro functions **/
 
 /** Defined datatypes **/
+typedef enum 
+{
+    QUEUE_NULL,
+    QUEUE_EMPTY,
+    QUEUE_FULL,
+    QUEUE_OK,
+    QUEUE_NOT_OK
+}
+queueStatusMsg;
+
 typedef struct Queue
 {
     int front;
     int rear;
     int capacity;
+    int size;
     Process *queue;
 }
 Queue;
@@ -32,47 +44,64 @@ Queue;
 /** Functions declaration **/
 
 /**
- * @brief Initialize new queue structure.
+ * @brief Initialize new queue
  * 
- * @param capacity Max number of element queue can handle.
- * @return Queue* New queue to use.
+ * @param queue Reference to queue variable
+ * @param capacity Max size of the queue
+ * @return queueStatusMsg Status message
  */
-Queue *queue_init(int capacity);
+queueStatusMsg queue_init(Queue *queue, int capacity);
 
 /**
- * @brief Add an element to the queue.
+ * @brief Add new item to the end of the  queue.
  * 
- * @param process Reference to process variable.
+ * @param queue Reference to queue variable.
+ * @param item Item to add.
+ * @return queueStatusMsg Status message.
  */
-void queue_enqueue(Process *process);
+queueStatusMsg queue_enqueue(Queue *queue, QUEUE_ITEM_TYPE item);
 
 /**
- * @brief remove an element from the queue and return it.
+ * @brief Remove first item from the queue.
  * 
- * @return Process* The address of process which had been removed.
+ * @param queue Reference to queue variable.
+ * @param item Return the removed item value in this variable (Can be null).
+ * @return queueStatusMsg Status message.
  */
-Process *queue_dequeue(void);
+queueStatusMsg queue_dequeue(Queue *queue, QUEUE_ITEM_TYPE *item);
 
 /**
- * @brief Get first element on the queue.
+ * @brief Get the first item in the queue.
  * 
- * @return Process* address to the first process in queue.
+ * @param queue Reference to queue variable.
+ * @param item Return the first item value in this variable.
+ * @return queueStatusMsg Status message.
  */
-Process *queue_front(void);
+queueStatusMsg queue_front(Queue *queue, QUEUE_ITEM_TYPE *item);
 
 /**
- * @brief Get last element on the queue.
+ * @brief Get the last item in the queue.
  * 
- * @return Process* address to the last process in queue.
+ * @param queue Reference to queue variable.
+ * @param item Return the last item value in this variable.
+ * @return queueStatusMsg Status message.
  */
-Process *queue_rear(void);
+queueStatusMsg queue_rear(Queue *queue, QUEUE_ITEM_TYPE *item);
 
 /**
- * @brief Free all memory allocated by the queue.
+ * @brief Return status of the Queue.
  * 
- * @param queue Address to target queue. 
- * 
+ * @param queue Reference to queue variable.
+ * @return queueStatusMsg Status message.
  */
-void queue_destroy(Queue *queue);
+queueStatusMsg queue_status_check(Queue *queue);
+
+/**
+ * @brief Free all variables allocated in the queue.
+ * 
+ * @param queue Reference to queue variable.
+ * @return queueStatusMsg Status message.
+ */
+queueStatusMsg queue_destroy(Queue *queue);
 
 #endif
