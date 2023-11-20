@@ -10,9 +10,29 @@
  */
 
 #include <stdio.h>
+#include "models/Queue.h"
 
 int main(void)
 {
-    printf("hi2\n");
+    Queue *queue = NULL;
+    printf("Status: %d\n", queue_init(&queue, 5));
+    printf("------------\n");
+
+    int number;
+    int nums[5] = {1, 2, 3, 4, 5};
+    for (int i = 0; i < 5; i++)
+    {
+        printf("Status enqueue: %d\n", queue_enqueue(queue, &nums[i]));
+        printf("Status rear: %d\n", queue_rear(queue, &number));
+        printf("Item value: %d\n", number);
+        printf("Size: %d\n",queue->size);
+        printf("Rear: %d         Front: %d\n", queue->rear, queue->front);
+        printf("------------\n");
+    }
+    printf("LOOOOOOOOOOL\n");
+
+    printf("Status: %d\n", queue_destroy(queue));
+    printf("All done have a good day!\n");
+
     return 0;
 }

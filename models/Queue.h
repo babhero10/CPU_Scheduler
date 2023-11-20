@@ -1,7 +1,7 @@
 /**
  * @file Queue.h
  * @author Abdullah Elsayed Ahmed (ID: 7459, Group: 3, Section: 2)
- * @brief (Queue) data structure to help with the project 
+ * @brief (Queue of address) data structure to help with the project 
  * @version 0.1
  * @date 2023-11-18
  * 
@@ -16,41 +16,41 @@
 #include "Process.h"
 
 /** Macro defintions **/
-#define QUEUE_ITEM_TYPE Process *
 
 /** Macro functions **/
 
 /** Defined datatypes **/
+typedef int queueItemType;
+
 typedef enum 
 {
     QUEUE_NULL,
     QUEUE_EMPTY,
     QUEUE_FULL,
-    QUEUE_OK,
-    QUEUE_NOT_OK
+    QUEUE_OK
 }
 queueStatusMsg;
 
-typedef struct Queue
+typedef struct
 {
     int front;
     int rear;
     int capacity;
     int size;
-    Process *queue;
+    queueItemType **queue; // Array of length capacity
 }
 Queue;
 
 /** Functions declaration **/
 
 /**
- * @brief Initialize new queue
+ * @brief Initialize new queue.
  * 
- * @param queue Reference to queue variable
- * @param capacity Max size of the queue
- * @return queueStatusMsg Status message
+ * @param queue Reference to queue variable to save the new Queue in.
+ * @param capacity Max size of the queue.
+ * @return queueStatusMsg Status message.
  */
-queueStatusMsg queue_init(Queue *queue, int capacity);
+queueStatusMsg queue_init(Queue **queue, const int capacity);
 
 /**
  * @brief Add new item to the end of the  queue.
@@ -59,7 +59,7 @@ queueStatusMsg queue_init(Queue *queue, int capacity);
  * @param item Item to add.
  * @return queueStatusMsg Status message.
  */
-queueStatusMsg queue_enqueue(Queue *queue, QUEUE_ITEM_TYPE item);
+queueStatusMsg queue_enqueue(Queue *queue, queueItemType *item);
 
 /**
  * @brief Remove first item from the queue.
@@ -68,7 +68,7 @@ queueStatusMsg queue_enqueue(Queue *queue, QUEUE_ITEM_TYPE item);
  * @param item Return the removed item value in this variable (Can be null).
  * @return queueStatusMsg Status message.
  */
-queueStatusMsg queue_dequeue(Queue *queue, QUEUE_ITEM_TYPE *item);
+queueStatusMsg queue_dequeue(Queue *queue, queueItemType *item);
 
 /**
  * @brief Get the first item in the queue.
@@ -77,7 +77,7 @@ queueStatusMsg queue_dequeue(Queue *queue, QUEUE_ITEM_TYPE *item);
  * @param item Return the first item value in this variable.
  * @return queueStatusMsg Status message.
  */
-queueStatusMsg queue_front(Queue *queue, QUEUE_ITEM_TYPE *item);
+queueStatusMsg queue_front(Queue *queue, queueItemType *item);
 
 /**
  * @brief Get the last item in the queue.
@@ -86,7 +86,7 @@ queueStatusMsg queue_front(Queue *queue, QUEUE_ITEM_TYPE *item);
  * @param item Return the last item value in this variable.
  * @return queueStatusMsg Status message.
  */
-queueStatusMsg queue_rear(Queue *queue, QUEUE_ITEM_TYPE *item);
+queueStatusMsg queue_rear(const Queue *queue, queueItemType *item);
 
 /**
  * @brief Return status of the Queue.
@@ -94,7 +94,7 @@ queueStatusMsg queue_rear(Queue *queue, QUEUE_ITEM_TYPE *item);
  * @param queue Reference to queue variable.
  * @return queueStatusMsg Status message.
  */
-queueStatusMsg queue_status_check(Queue *queue);
+queueStatusMsg queue_status_check(const Queue *queue);
 
 /**
  * @brief Free all variables allocated in the queue.

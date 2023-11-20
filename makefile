@@ -1,8 +1,4 @@
-
-main.c: main.exe
-	./main
-
-main.exe:
+main:
 	gcc -o main.exe *.c models/*.c models/*.h
 
 clean:
