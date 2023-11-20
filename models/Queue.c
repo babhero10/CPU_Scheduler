@@ -15,6 +15,7 @@
 /** Libraries **/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Queue.h"
 
 /** Functions declaration **/
@@ -106,8 +107,8 @@ queueStatusMsg queue_dequeue(Queue *queue, queueItemType *item)
     }
     else
     {
-        queue_rear(queue, item);
-        queue->rear = (((queue->rear) + (queue->capacity) - 1) % (queue->capacity));
+        queue_front(queue, item);
+        queue->front = (((queue->front) + 1) % (queue->capacity));
         queue->size--;
     }
 
@@ -186,6 +187,33 @@ queueStatusMsg queue_status_check(const Queue *queue)
     }
 
     return ret;
+}
+
+/**
+ * @brief Print message for status code.
+ * 
+ * @param status status code.
+ * @param msg Reference to the msg distentions. 
+ */
+void queue_status_msg(queueStatusMsg status, char *res_msg)
+{
+    switch (status) 
+    {
+        case QUEUE_NULL:
+            strcpy(res_msg, "Queue is null point!");
+            break;
+        case QUEUE_EMPTY:
+            strcpy(res_msg, "Queue is empty!");
+            break;
+        case QUEUE_FULL:
+            strcpy(res_msg, "Queue is full!");
+            break;
+        case QUEUE_OK:
+            strcpy(res_msg, "All Good!");
+            break;
+        default:
+            strcpy(res_msg, "Invalid Code");            
+    }
 }
 
 /**

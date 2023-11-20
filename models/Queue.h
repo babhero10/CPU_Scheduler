@@ -97,11 +97,20 @@ queueStatusMsg queue_rear(const Queue *queue, queueItemType *item);
 queueStatusMsg queue_status_check(const Queue *queue);
 
 /**
+ * @brief Print message for status code.
+ * 
+ * @param status status code.
+ * @param msg Reference to the msg distentions. 
+ */
+void queue_status_msg(queueStatusMsg status, char *res_msg);
+
+/**
  * @brief Free all variables allocated in the queue.
  * 
  * @param queue Reference to queue variable.
  * @return queueStatusMsg Status message.
  */
 queueStatusMsg queue_destroy(Queue *queue);
+
 
 #endif
