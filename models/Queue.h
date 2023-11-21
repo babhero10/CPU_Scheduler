@@ -1,6 +1,6 @@
 /**
  * @file Queue.h
- * @author Abdullah Elsayed Ahmed (ID: 7459, Group: 3, Section: 2)
+ * @author Abdullah Elsayed Ahmed
  * @brief (Queue of address) data structure to help with the project 
  * @version 0.1
  * @date 2023-11-18

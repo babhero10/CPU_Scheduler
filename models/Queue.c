@@ -1,7 +1,7 @@
 /**
  * @file Queue.h
- * @author Abdullah Elsayed Ahmed (ID: 7459, Group: 3, Section: 2)
- * @brief (Queue) data structure to help with the project 
+ * @author Abdullah Elsayed Ahmed
+ * @brief Functions defintion for Queue.h
  * @version 0.1
  * @date 2023-11-18
  * 
@@ -211,7 +211,7 @@ void queue_status_msg(queueStatusMsg status, char *res_msg)
     {
         return;
     }
-    
+
     switch (status) 
     {
         case QUEUE_NULL:

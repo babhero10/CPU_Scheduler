@@ -1,7 +1,7 @@
 /**
  * @file Process.c
- * @author Abdullah Elsayed Ahmed (ID: 7459, Group: 3, Section: 2)
- * @brief Functions defintions for Process.h
+ * @author Abdullah Elsayed Ahmed
+ * @brief Functions defintion for Process.h
  * @version 0.1
  * @date 2023-11-18
  * 
@@ -26,7 +26,7 @@
  */
 processStatusMsg process_init(const char *name, const int time, Process **process_dist)
 {
-    processStatusMsg ret = PROCESS_WAIT;
+    processStatusMsg ret = PROCESS_OK;
     static unsigned int pid = 0;
 
     // Invalid argument
@@ -49,6 +49,7 @@ processStatusMsg process_init(const char *name, const int time, Process **proces
             strcpy((*process_dist)->name, name);
             (*process_dist)->pid = pid;
             (*process_dist)->time = time;
+            (*process_dist)->status = PROCESS_WAITING;
 
             pid++;
         }
@@ -104,6 +105,10 @@ processStatusMsg process_to_string(Process *process, char *str_dist)
 
             itoa(process->time, temp, 10);
             strcat(str_dist, temp);
+            strcat(str_dist, ",");
+
+            process_status_msg(process->status, temp);
+            strcat(str_dist, temp);
         }
     }
 
@@ -119,7 +124,7 @@ processStatusMsg process_to_string(Process *process, char *str_dist)
  */
 processStatusMsg process_update(Process *process, const int time_finished)
 {
-    processStatusMsg ret = PROCESS_WAIT;
+    processStatusMsg ret = PROCESS_OK;
     if (process == NULL)
     {
         ret = PROCESS_NULL;
@@ -166,38 +171,95 @@ processStatusMsg process_get_time(Process *process, int *time_dist)
 }
 
 /**
- * @brief Print message for status code.
+ * @brief Set status value of the process.
+ * 
+ * @param process Reference to process variable.
+ * @return processStatusMsg process'status
+ */
+processStatusMsg process_set_status(Process *process, processStatusMsg status)
+{
+    processStatusMsg ret;
+
+    if (process == NULL)
+    {
+        ret = PROCESS_NULL;
+    }
+    else
+    {
+        if (process_status_msg(status, NULL) == PROCESS_INVALID)
+        {
+            ret = PROCESS_INVALID;
+        }
+        else
+        {
+            process->status;
+            ret = status;
+        }
+    }
+    return ret;
+}
+
+/**
+ * @brief Get status value of the process.
+ * 
+ * @param process Reference to process variable.
+ * @return processStatusMsg process'status
+ */
+processStatusMsg process_get_status(Process *process)
+{
+    processStatusMsg ret;
+
+    if (process == NULL)
+    {
+        ret = PROCESS_NULL;
+    }
+    else
+    {
+        ret = process->status;
+    }
+    return ret;
+}
+
+/**
+ * @brief Print message for status code or to check the validation of the status
  * 
  * @param status status code.
  * @param msg Reference to the msg distentions. 
+ * @return processStatusMsg status
  */
-void process_status_msg(processStatusMsg status, char *res_msg)
+processStatusMsg process_status_msg(processStatusMsg status, char *res_msg)
 {
-    if (res_msg == NULL)
-    {
-        return;
-    }
+    processStatusMsg ret = status;
+    char temp[30];
 
     switch (status) 
     {
         case PROCESS_NULL:
-            strcpy(res_msg, "Process is null point!");
+            strcpy(temp, "NULL");
             break;
-        case PROCESS_WAIT:
-            strcpy(res_msg, "Process is waiting!");
+        case PROCESS_WAITING:
+            strcpy(temp, "Waiting");
             break;
         case PROCESS_READY:
-            strcpy(res_msg, "Process is ready!");
+            strcpy(temp, "Ready");
             break;
         case PROCESS_DONE:
-            strcpy(res_msg, "Process is done!");
+            strcpy(temp, "Done");
             break;
         case PROCESS_OK:
-            strcpy(res_msg, "All Good!");
+            strcpy(temp, "OK");
             break;
         default:
-            strcpy(res_msg, "Invalid Code");            
+            strcpy(temp, "Invalid Code");  
+            ret = PROCESS_INVALID;          
     }
+
+    if (res_msg != NULL)
+    {
+       strcpy(res_msg, temp);  
+    }
+
+    return ret;
 }
 
 /**

@@ -1,6 +1,6 @@
 /**
  * @file Process.h
- * @author Abdullah Elsayed Ahmed (ID: 7459, Group: 3, Section: 2)
+ * @author Abdullah Elsayed Ahmed
  * @brief Process data type and function
  * @version 0.1
  * @date 2023-11-18
@@ -21,11 +21,14 @@
 /** Defined datatypes **/
 typedef enum 
 {
-    PROCESS_NULL,
-    PROCESS_WAIT,
-    PROCESS_READY,
-    PROCESS_DONE,
-    PROCESS_OK
+    PROCESS_NULL,      // Process is null pointer.
+    PROCESS_REJECTED,  // Process is rejected by scheduler.
+    PROCESS_WAITING,   // Process is in waiting queue (Default).
+    PROCESS_READY,     // Process is Ready.
+    PROCESS_RUNNING,   // Process is Running.
+    PROCESS_DONE,      // Process is terminated.
+    PROCESS_INVALID,   // Invalid status code.
+    PROCESS_OK         // General purpose to induct success of operation.
 }
 processStatusMsg;
 
@@ -34,6 +37,7 @@ typedef struct Process
     char *name;
     int pid;
     int time;
+    processStatusMsg status
 }
 Process;
 
@@ -90,8 +94,9 @@ processStatusMsg process_get_time(Process *process, int *time_dist);
  * 
  * @param status status code.
  * @param msg Reference to the msg distentions. 
+ * @return processStatusMsg status
  */
-void process_status_msg(processStatusMsg status, char *res_msg);
+processStatusMsg process_status_msg(processStatusMsg status, char *res_msg);
 
 /**
  * @brief Free all memory allocated by the process.
