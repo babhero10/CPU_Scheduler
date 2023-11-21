@@ -1,9 +1,9 @@
 /**
- * @file main.c
- * @author Abdullah Elsayed Ahmed (ID: 7459, Group: 3, Section: 2)
- * @brief Program to simulate CPU Scheduling with 3 Queues
+ * @file testQueue.c
+ * @author Abdullah Elsayed Ahmed
+ * @brief Program to Test Queue code
  * @version 0.1
- * @date 2023-11-18
+ * @date 2023-11-21
  * 
  * @copyright Copyright (c) 2023
  * 

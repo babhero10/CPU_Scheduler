@@ -20,7 +20,7 @@
 /** Macro functions **/
 
 /** Defined datatypes **/
-typedef int queueItemType;
+typedef Process queueItemType;
 
 typedef enum 
 {

@@ -30,33 +30,43 @@
 queueStatusMsg queue_init(Queue **queue, const int capacity)
 {
     queueStatusMsg ret = QUEUE_OK;
-    *queue = NULL;
-
-    Queue *newQueue = (Queue *) malloc(sizeof(Queue));
-
-    // Out of memory
-    if (newQueue == NULL)
+    
+    // Invalid argument
+    if (queue == NULL)
     {
         ret = QUEUE_NULL;
-    } 
+    }
     else
     {
-        // Initialize the queue
-        newQueue->queue = (queueItemType **)malloc(sizeof(queueItemType *) * capacity);
-        newQueue->front = 0;
-        newQueue->rear = 0;
-        newQueue->size = 0;
-        newQueue->capacity = capacity;
+
+        *queue = NULL;
+
+        Queue *newQueue = (Queue *) malloc(sizeof(Queue));
 
         // Out of memory
-        if (newQueue->queue == NULL)
+        if (newQueue == NULL)
         {
-            free(newQueue);
             ret = QUEUE_NULL;
-        }
+        } 
         else
         {
-            *queue = newQueue;
+            // Initialize the queue
+            newQueue->queue = (queueItemType **)malloc(sizeof(queueItemType *) * capacity);
+            newQueue->front = 0;
+            newQueue->rear = 0;
+            newQueue->size = 0;
+            newQueue->capacity = capacity;
+
+            // Out of memory
+            if (newQueue->queue == NULL)
+            {
+                free(newQueue);
+                ret = QUEUE_NULL;
+            }
+            else
+            {
+                *queue = newQueue;
+            }
         }
     }
 
@@ -197,6 +207,11 @@ queueStatusMsg queue_status_check(const Queue *queue)
  */
 void queue_status_msg(queueStatusMsg status, char *res_msg)
 {
+    if (res_msg == NULL)
+    {
+        return;
+    }
+    
     switch (status) 
     {
         case QUEUE_NULL:
