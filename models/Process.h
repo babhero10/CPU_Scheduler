@@ -13,6 +13,8 @@
 #define PROCESS_H_
 
 /** Libraries **/
+#include "Std_types.h"
+#include "Std_codes.h"
 
 /** Macro defintions **/
 
@@ -21,23 +23,21 @@
 /** Defined datatypes **/
 typedef enum 
 {
-    PROCESS_NULL,      // Process is null pointer.
     PROCESS_REJECTED,  // Process is rejected by scheduler.
     PROCESS_WAITING,   // Process is in waiting queue (Default).
     PROCESS_READY,     // Process is Ready.
     PROCESS_RUNNING,   // Process is Running.
     PROCESS_DONE,      // Process is terminated.
-    PROCESS_INVALID,   // Invalid status code.
-    PROCESS_OK         // General purpose to induct success of operation.
+    PROCESS_INVALID    // Invalid process status.
 }
-processStatusMsg;
+processStatus;
 
 typedef struct Process
 {
     char *name;
     int pid;
     int time;
-    processStatusMsg status
+    processStatus status;
 }
 Process;
 
@@ -46,64 +46,82 @@ Process;
 /**
  * @brief Initialize a new process.
  * 
+ * @param process_dist The Address to store the new process.
  * @param name Process program name.
  * @param pid  Process ID Number.
  * @param time The number of time required to finish the process.
- * @param process_dist The Address to store the new process.
- * @return processStatusMsg Current status of the process.
+ * @return Std_code Status message.
  */
-processStatusMsg process_init(const char *name, const int time, Process **process_dist);
+Std_code process_init(Process **process_dist, const char *name, const int time);
 
 /**
  * @brief Make random new process with incrementing PID.
  * 
  * @param process_dist The Address to store the new process.
- * @return processStatusMsg Current status of the process.
+ * @return Std_code Status message.
  */
-processStatusMsg process_create_random(Process **process_dist);
+Std_code process_create_random(Process **process_dist);
 
 /**
  * @brief Create string value for (process's name, pid, and time).
  * 
  * @param process Current status of the process.
  * @param str_dist The Address to store the output.
- * @return processStatusMsg Current status of the process.
+ * @return Std_code Status message.
  */
-processStatusMsg process_to_string(Process *process, char *str_dist);
+Std_code process_to_string(Process *process, char *str_dist);
 
 /**
  * @brief Take the time done and subtract it from process's time.
  * 
  * @param process Reference to process variable. 
  * @param time_finished Time which done processing.
- * @return processStatusMsg Current status of the process.
+ * @return Std_code Status message.
  */
-processStatusMsg process_update(Process *process, const int time_finished);
+Std_code process_update(Process *process, const int time_finished);
 
 /**
- * @brief Get the process time and save it to time_dist
+ * @brief Get the process time and save it to time_dist.
  * 
  * @param process Reference to process variable. 
  * @param time_dist The Address to store process's time.
- * @return processStatusMsg Current status of the process.
+ * @return Std_code Status message.
  */
-processStatusMsg process_get_time(Process *process, int *time_dist);
+Std_code process_get_time(Process *process, int *time_dist);
 
 /**
- * @brief Print message for status code.
+ * @brief Get the process status and save it to status.
+ * 
+ * @param process Reference to process variable. 
+ * @param status The Address to store process's status.
+ * @return Std_code Status message.
+ */
+Std_code process_get_status(Process *process, processStatus *status);
+
+/**
+ * @brief Update process status.
+ * 
+ * @param process Reference to process variable. 
+ * @param status Status value to update.
+ * @return Std_code Status message.
+ */
+Std_code process_update_status(Process *process, processStatus status);
+
+/**
+ * @brief Print message for status code or to check the validation of the status
  * 
  * @param status status code.
  * @param msg Reference to the msg distentions. 
- * @return processStatusMsg status
+ * @return Std_code status.
  */
-processStatusMsg process_status_msg(processStatusMsg status, char *res_msg);
+Std_code process_status_msg(Std_code status, char *res_msg);
 
 /**
  * @brief Free all memory allocated by the process.
  * 
  * @param process Reference to process variable. 
- * @return processStatusMsg Current status of the process.
+ * @return Std_code Status message.
  */
-processStatusMsg process_destroy(Process *process);
+Std_code process_destroy(Process *process);
 
 #endif

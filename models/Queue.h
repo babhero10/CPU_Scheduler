@@ -13,6 +13,8 @@
 #define QUEUE_H_
 
 /** Libraries **/
+#include "Std_types.h"
+#include "Std_codes.h"
 #include "Process.h"
 
 /** Macro defintions **/
@@ -20,23 +22,14 @@
 /** Macro functions **/
 
 /** Defined datatypes **/
-typedef Process queueItemType;
-
-typedef enum 
-{
-    QUEUE_NULL,
-    QUEUE_EMPTY,
-    QUEUE_FULL,
-    QUEUE_OK
-}
-queueStatusMsg;
+typedef int queueItemType;
 
 typedef struct
 {
-    int front;
-    int rear;
-    int capacity;
-    int size;
+    uint8_t front;
+    uint8_t rear;
+    uint8_t capacity;
+    uint8_t size;
     queueItemType **queue; // Array of length capacity
 }
 Queue;
@@ -48,69 +41,71 @@ Queue;
  * 
  * @param queue Reference to queue variable to save the new Queue in.
  * @param capacity Max size of the queue.
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_init(Queue **queue, const int capacity);
+Std_code queue_init(Queue **queue, const uint8_t capacity);
 
 /**
  * @brief Add new item to the end of the  queue.
  * 
  * @param queue Reference to queue variable.
  * @param item Item to add.
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_enqueue(Queue *queue, queueItemType *item);
+Std_code queue_enqueue(Queue *queue, queueItemType *item);
 
 /**
  * @brief Remove first item from the queue.
  * 
  * @param queue Reference to queue variable.
  * @param item Return the removed item value in this variable (Can be null).
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_dequeue(Queue *queue, queueItemType *item);
+Std_code queue_dequeue(Queue *queue, queueItemType *item);
 
 /**
  * @brief Get the first item in the queue.
  * 
  * @param queue Reference to queue variable.
  * @param item Return the first item value in this variable.
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_front(Queue *queue, queueItemType *item);
+Std_code queue_front(Queue *queue, queueItemType *item);
 
 /**
  * @brief Get the last item in the queue.
  * 
  * @param queue Reference to queue variable.
  * @param item Return the last item value in this variable.
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_rear(const Queue *queue, queueItemType *item);
+Std_code queue_rear(const Queue *queue, queueItemType *item);
 
 /**
- * @brief Return status of the Queue.
+ * @brief Check if queue is empty or not.
  * 
  * @param queue Reference to queue variable.
- * @return queueStatusMsg Status message.
+ * @param isEmpty Address to return the value in.
+ * @return Std_code Status message. 
  */
-queueStatusMsg queue_status_check(const Queue *queue);
+Std_code queue_is_empty(const Queue *queue, boolean *isEmpty);
 
 /**
- * @brief Print message for status code.
+ * @brief Check if queue is full or not.
  * 
- * @param status status code.
- * @param msg Reference to the msg distentions. 
+ * @param queue Reference to queue variable.
+ * @param isFull Address to return the value in.
+ * @return Std_code Status message. 
  */
-void queue_status_msg(queueStatusMsg status, char *res_msg);
+Std_code queue_is_full(const Queue *queue, boolean *isFull);
 
 /**
  * @brief Free all variables allocated in the queue.
  * 
  * @param queue Reference to queue variable.
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_destroy(Queue *queue);
+Std_code queue_destroy(Queue *queue);
 
 
 #endif

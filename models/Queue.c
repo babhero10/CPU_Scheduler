@@ -1,5 +1,5 @@
 /**
- * @file Queue.h
+ * @file Queue.c
  * @author Abdullah Elsayed Ahmed
  * @brief Functions defintion for Queue.h
  * @version 0.1
@@ -8,9 +8,6 @@
  * @copyright Copyright (c) 2023
  * 
  */
-
-#ifndef _QUEUE_H_
-#define _QUEUE_H_
 
 /** Libraries **/
 #include <stdio.h>
@@ -25,16 +22,16 @@
  * 
  * @param queue Reference to queue variable to save the new Queue in.
  * @param capacity Max size of the queue.
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_init(Queue **queue, const int capacity)
+Std_code queue_init(Queue **queue, const uint8_t capacity)
 {
-    queueStatusMsg ret = QUEUE_OK;
+    Std_code ret = STD_OK;
     
     // Invalid argument
     if (queue == NULL)
     {
-        ret = QUEUE_NULL;
+        ret = STD_NULL_POINTER;
     }
     else
     {
@@ -46,7 +43,7 @@ queueStatusMsg queue_init(Queue **queue, const int capacity)
         // Out of memory
         if (newQueue == NULL)
         {
-            ret = QUEUE_NULL;
+            ret = STD_OUT_OF_MEMORY;
         } 
         else
         {
@@ -61,7 +58,7 @@ queueStatusMsg queue_init(Queue **queue, const int capacity)
             if (newQueue->queue == NULL)
             {
                 free(newQueue);
-                ret = QUEUE_NULL;
+                ret = STD_OUT_OF_MEMORY;
             }
             else
             {
@@ -78,22 +75,35 @@ queueStatusMsg queue_init(Queue **queue, const int capacity)
  * 
  * @param queue Reference to queue variable.
  * @param item Item to add.
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_enqueue(Queue *queue, queueItemType *item)
+Std_code queue_enqueue(Queue *queue, queueItemType *item)
 {
-    queueStatusMsg ret = QUEUE_OK;
+    Std_code ret = STD_OK;
 
-    // If Queue is null or full exit
-    if (queue_status_check(queue) == QUEUE_NULL || queue_status_check(queue) == QUEUE_FULL)
+    // If Queue is null
+    if (queue == NULL)
     {
-        ret = queue_status_check(queue);
+        ret = STD_NULL_POINTER;
     }
     else
     {
-        queue->queue[((queue->rear) % (queue->capacity))] = item;
-        queue->rear = (((queue->rear) + 1) % (queue->capacity));
-        queue->size++;
+        boolean isFull;
+        ret = queue_is_full(queue, &isFull);
+
+        if (isFull)
+        {
+            ret = STD_NOT_OK;
+        }
+        else
+        {
+            if (ret == STD_OK)
+            {
+                queue->queue[((queue->rear) % (queue->capacity))] = item;
+                queue->rear = (((queue->rear) + 1) % (queue->capacity));
+                queue->size++;
+            }
+        }
     }
 
     return ret;
@@ -104,22 +114,35 @@ queueStatusMsg queue_enqueue(Queue *queue, queueItemType *item)
  * 
  * @param queue Reference to queue variable.
  * @param item Return the removed item value in this variable (Can be null).
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_dequeue(Queue *queue, queueItemType *item)
+Std_code queue_dequeue(Queue *queue, queueItemType *item)
 {
-    queueStatusMsg ret = QUEUE_OK;
+    Std_code ret = STD_OK;
 
-    // If Queue is null or empty exit
-    if (queue_status_check(queue) == QUEUE_NULL || queue_status_check(queue) == QUEUE_EMPTY)
+    // If Queue is null
+    if (queue == NULL)
     {
-        ret = queue_status_check(queue);
+        ret = STD_NULL_POINTER;
     }
     else
     {
-        queue_front(queue, item);
-        queue->front = (((queue->front) + 1) % (queue->capacity));
-        queue->size--;
+        boolean isEmpty;
+        ret = queue_is_empty(queue, &isEmpty);
+
+        if (isEmpty)
+        {
+            ret = STD_NOT_OK;
+        }
+        else
+        {
+            if (ret == STD_OK)
+            {
+                queue_front(queue, item);
+                queue->front = (((queue->front) + 1) % (queue->capacity));
+                queue->size--;
+            }
+        }
     }
 
     return ret;
@@ -130,20 +153,33 @@ queueStatusMsg queue_dequeue(Queue *queue, queueItemType *item)
  * 
  * @param queue Reference to queue variable.
  * @param item Return the first item value in this variable.
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_front(Queue *queue, queueItemType *item)
+Std_code queue_front(Queue *queue, queueItemType *item)
 {
-    queueStatusMsg ret = QUEUE_OK;
+    Std_code ret = STD_OK;
 
-    // If Queue is null or empty make item NULL
-    if (queue_status_check(queue) == QUEUE_NULL || queue_status_check(queue) == QUEUE_EMPTY)
+    // If Queue is null
+    if (queue == NULL)
     {
-        ret = queue_status_check(queue);
+        ret = STD_NULL_POINTER;
     }
     else
     {
-        *item = *queue->queue[((queue->front) % (queue->size))];
+        boolean isEmpty;
+        ret = queue_is_empty(queue, &isEmpty);
+
+        if (isEmpty)
+        {
+            ret = STD_NOT_OK;
+        }
+        else
+        {
+            if (ret == STD_OK)
+            {
+                *item = *queue->queue[((queue->front) % (queue->size))];
+            }
+        }
     }
 
     return ret;
@@ -154,106 +190,104 @@ queueStatusMsg queue_front(Queue *queue, queueItemType *item)
  * 
  * @param queue Reference to queue variable.
  * @param item Return the last item value in this variable.
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_rear(const Queue *queue, queueItemType *item)
+Std_code queue_rear(const Queue *queue, queueItemType *item)
 {
-    queueStatusMsg ret = QUEUE_OK;
+    Std_code ret = STD_OK;
 
-    // If Queue is null or empty make item NULL
-    if (queue_status_check(queue) == QUEUE_NULL || queue_status_check(queue) == QUEUE_EMPTY)
+    // If Queue is null
+    if (queue == NULL)
     {
-        ret = queue_status_check(queue);
+        ret = STD_NULL_POINTER;
     }
     else
     {
-        *item = *queue->queue[(((queue->rear) + (queue->capacity) - 1) % (queue->capacity))];
+        boolean isEmpty;
+        ret = queue_is_empty(queue, &isEmpty);
+
+        if (isEmpty)
+        {
+            ret = STD_NOT_OK;
+        }
+        else
+        {
+            if (ret == STD_OK)
+            {
+                *item = *queue->queue[(((queue->rear) + (queue->capacity) - 1) % (queue->capacity))];
+            }
+        }
     }
 
     return ret;
 }
 
 /**
- * @brief Return status of the Queue.
+ * @brief Check if queue is empty or not.
  * 
  * @param queue Reference to queue variable.
- * @return queueStatusMsg Status message.
+ * @param isEmpty Address to return the value in.
+ * @return Std_code Status message. 
  */
-queueStatusMsg queue_status_check(const Queue *queue)
+Std_code queue_is_empty(const Queue *queue, boolean *isEmpty)
 {
-    queueStatusMsg ret = QUEUE_OK;
+    Std_code ret = STD_OK;
 
-    if (queue == NULL)
+    if (queue == NULL || isEmpty == NULL)
     {
-        ret = QUEUE_NULL;
+        ret = STD_NULL_POINTER;
     }
-    else if (queue->size == queue->capacity)
+    else
     {
-        ret = QUEUE_FULL;
-    }
-    else if (queue->size == 0)
-    {
-        ret = QUEUE_EMPTY;
+        *isEmpty = (queue->size == 0);
     }
 
     return ret;
 }
 
 /**
- * @brief Print message for status code.
+ * @brief Check if queue is full or not.
  * 
- * @param status status code.
- * @param msg Reference to the msg distentions. 
+ * @param queue Reference to queue variable.
+ * @param isFull Address to return the value in.
+ * @return Std_code Status message. 
  */
-void queue_status_msg(queueStatusMsg status, char *res_msg)
+Std_code queue_is_full(const Queue *queue, boolean *isFull)
 {
-    if (res_msg == NULL)
+    Std_code ret = STD_OK;
+
+    if (queue == NULL || isFull == NULL)
     {
-        return;
+        ret = STD_NULL_POINTER;
+    }
+    else
+    {
+        *isFull = (queue->size == queue->capacity);
     }
 
-    switch (status) 
-    {
-        case QUEUE_NULL:
-            strcpy(res_msg, "Queue is null point!");
-            break;
-        case QUEUE_EMPTY:
-            strcpy(res_msg, "Queue is empty!");
-            break;
-        case QUEUE_FULL:
-            strcpy(res_msg, "Queue is full!");
-            break;
-        case QUEUE_OK:
-            strcpy(res_msg, "All Good!");
-            break;
-        default:
-            strcpy(res_msg, "Invalid Code");            
-    }
+    return ret;
 }
 
 /**
  * @brief Free all variables allocated in the queue.
  * 
  * @param queue Reference to queue variable.
- * @return queueStatusMsg Status message.
+ * @return Std_code Status message.
  */
-queueStatusMsg queue_destroy(Queue *queue)
+Std_code queue_destroy(Queue *queue)
 {
-    queueStatusMsg ret = QUEUE_OK;
+    Std_code ret = STD_OK;
     
     // Check if queue not null
-    if (queue_status_check(queue) == QUEUE_NULL)
+    if (queue == NULL)
     {
-        ret = QUEUE_NULL;
+        ret = STD_NULL_POINTER;
     }
     else
     {
         free(queue->queue);
         free(queue);
-        ret = QUEUE_OK;
     }
 
     return ret;
 }
-
-#endif

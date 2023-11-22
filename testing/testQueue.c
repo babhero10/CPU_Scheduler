@@ -15,11 +15,11 @@
 int main(void)
 {
     char statusMsg[50];
-    queueStatusMsg statusCode; 
+    Std_code statusCode; 
     Queue *queue = NULL;
 
     statusCode = queue_init(&queue, 5);
-    queue_status_msg(statusCode, statusMsg);
+    std_code_msg(statusCode, statusMsg);
 
     printf("Init Status Code: %d\n", statusCode);
     printf("Init Status Message: %s\n", statusMsg);
@@ -30,13 +30,13 @@ int main(void)
     for (int i = 0; i < 5; i++)
     {
         statusCode = queue_enqueue(queue, &nums[i]);
-        queue_status_msg(statusCode, statusMsg);
+        std_code_msg(statusCode, statusMsg);
 
         printf("queue_enqueue Status Code: %d\n", statusCode);
         printf("queue_enqueue Status Message: %s\n", statusMsg);
 
         statusCode = queue_rear(queue, &number);
-        queue_status_msg(statusCode, statusMsg);
+        std_code_msg(statusCode, statusMsg);
 
         printf("queue_rear Status Code: %d\n", statusCode);
         printf("queue_rear Status Message: %s\n", statusMsg);
@@ -50,7 +50,7 @@ int main(void)
     for (int i = 0; i < 8; i++)
     {
         statusCode = queue_dequeue(queue, &number);
-        queue_status_msg(statusCode, statusMsg);
+        std_code_msg(statusCode, statusMsg);
 
         printf("queue_dequeue Status Code: %d\n", statusCode);
         printf("queue_dequeue Status Message: %s\n", statusMsg);
@@ -64,13 +64,13 @@ int main(void)
     for (int i = 0; i < 9; i++)
     {
         statusCode = queue_enqueue(queue, &nums[i]);
-        queue_status_msg(statusCode, statusMsg);
+        std_code_msg(statusCode, statusMsg);
 
         printf("queue_enqueue Status Code: %d\n", statusCode);
         printf("queue_enqueue Status Message: %s\n", statusMsg);
 
         statusCode = queue_rear(queue, &number);
-        queue_status_msg(statusCode, statusMsg);
+        std_code_msg(statusCode, statusMsg);
 
         printf("queue_rear Status Code: %d\n", statusCode);
         printf("queue_rear Status Message: %s\n", statusMsg);
@@ -82,7 +82,7 @@ int main(void)
     }
 
     statusCode = queue_destroy(queue);
-    queue_status_msg(statusCode, statusMsg);
+    std_code_msg(statusCode, statusMsg);
 
     printf("queue_destroy Status Code: %d\n", statusCode);
     printf("queue_destroy Status Message: %s\n", statusMsg);

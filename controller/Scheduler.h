@@ -30,20 +30,25 @@
 #define SCHEDULER_H_
 
 /** Libraries **/
+#include <stdlib.h>
 #include "../models/Queue.h"
 #include "../models/Process.h"
 
 /** Macro defintions **/
+#define MAX_WAIT_QUEUE 100
+#define MAX_QUEUE1 10
+#define MAX_QUEUE2 20
+#define MAX_QUEUE3 30
+
+/** Macro functions **/
+
+/** Defined datatypes **/
 typedef enum 
 {
-    PROCESS_NULL,
-    PROCESS_WAITING,
-    PROCESS_READY,
-    PROCESS_RUNNING,
-    PROCESS_DONE,
-    PROCESS_OK
+    SCHEDULER_NULL, // Process is null pointer.
+    SCHEDULER_OK
 }
-processStatusMsg;
+schedulerStatusMsg;
 
 typedef struct
 {
@@ -54,10 +59,22 @@ typedef struct
 }
 Scheduler;
 
-/** Macro functions **/
-
-
 /** Functions declaration **/
 
+/**
+ * @brief Initialize a new scheduler.
+ * 
+ * @param scheduler Address to store the new scheduler.
+ * @return schedulerStatusMsg Current status of the operation.
+ */
+schedulerStatusMsg scheduler_init(Scheduler **scheduler_dist);
+
+/**
+ * @brief free all space allocated by scheduler.
+ * 
+ * @param scheduler Address to scheduler target.
+ * @return schedulerStatusMsg Current status of the operation.
+ */
+schedulerStatusMsg scheduler_destroy(Scheduler *scheduler);
 
 #endif

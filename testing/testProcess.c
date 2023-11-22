@@ -17,7 +17,7 @@
 int main(void)
 {
     srand(time(NULL)); // Seed the random number generator with the current time
-    processStatusMsg status_code;
+    Std_code status_code;
     char process_str[50];
     char status_msg[50];
     Process *processes[10];
@@ -39,7 +39,7 @@ int main(void)
     for (int i = 0; i < 10; i++)
     {
         status_code = process_update(processes[i], 50);
-        process_status_msg(status_code, status_msg);
+        std_code_msg(status_code, status_msg);
         printf("Status Code: %d\n", status_code);
         printf("Status message: %s\n", status_msg);
 
@@ -59,10 +59,8 @@ int main(void)
     for (int i = 0; i < 10; i++)
     {
         status_code = process_destroy(processes[i]);
-        process_status_msg(status_code, status_msg);
+        std_code_msg(status_code, status_msg);
         printf("Status Code: %d\n", status_code);
         printf("Status message: %s\n", status_msg);
     }
-
-    return 0;
 }
