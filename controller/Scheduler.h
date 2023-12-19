@@ -31,11 +31,13 @@
 
 /** Libraries **/
 #include <stdlib.h>
+#include <string.h>
+#include "../models/Std_codes.h"
 #include "../models/Queue.h"
 #include "../models/Process.h"
 
 /** Macro defintions **/
-#define MAX_WAIT_QUEUE 100
+#define MAX_JOB_QUEUE 100
 #define MAX_QUEUE1 10
 #define MAX_QUEUE2 20
 #define MAX_QUEUE3 30
@@ -45,19 +47,13 @@
 /** Defined datatypes **/
 typedef enum 
 {
-    SCHEDULER_NULL, // Process is null pointer.
-    SCHEDULER_OK
+    SCHEDULER_ALL_READY, // When there is no process in job queue.
+    SCHEDULER_RUNNING,   // ALL good no errors.
+    SCHEDULER_ALL_DONE,  // When there is no process in any queue.
 }
-schedulerStatusMsg;
+schedulerStatus;
 
-typedef struct
-{
-    Queue *waitingQueue; // Any new process store here first with size of 100
-    Queue *Queue1;       // Queue with Q = 8  and size = 10
-    Queue *Queue2;       // Queue with Q = 16 and size = 20
-    Queue *Queue3;       // Queue with FCFS   and size = 30
-}
-Scheduler;
+typedef struct Scheduler Scheduler;
 
 /** Functions declaration **/
 
@@ -65,16 +61,87 @@ Scheduler;
  * @brief Initialize a new scheduler.
  * 
  * @param scheduler Address to store the new scheduler.
- * @return schedulerStatusMsg Current status of the operation.
+ * @return Std_code status of the operation.
  */
-schedulerStatusMsg scheduler_init(Scheduler **scheduler_dist);
+Std_code scheduler_init(Scheduler **scheduler_dist);
+
+/**
+ * @brief Responsible for adding process to job queue.
+ * 
+ * @param scheduler Reference to the scheduler.
+ * @param process Reference to process to add.
+ * @return Std_code 
+ */
+Std_code scheduler_add_process(Scheduler *scheduler, Process *process);
+
+/**
+ * @brief Takes process from jobQueue to Queue1.
+ * 
+ * @param scheduler Reference to the scheduler.
+ * @return Std_code 
+ */
+Std_code scheduler_make_process_ready(Scheduler *scheduler);
+
+/**
+ * @brief Responsible for running scheduler once.
+ * 
+ * @param scheduler Reference to the scheduler.
+ * @param process Store finished process.
+ * @return Std_code 
+ */
+Std_code scheduler_run(Scheduler *scheduler, Process **process);
+
+/**
+ * @brief Responsible for running queue1 once.
+ * 
+ * @param scheduler Reference to the scheduler.
+ * @param process Store worked on process into this variable.
+ * @return Std_code 
+ */
+Std_code scheduler_queue1_run(Scheduler *scheduler, Process **process);
+
+/**
+ * @brief Responsible for running queue2 once.
+ * 
+ * @param scheduler Reference to the scheduler.
+ * @param process Store worked on process into this variable.
+ * @return Std_code 
+ */
+Std_code scheduler_queue2_run(Scheduler *scheduler, Process **process);
+
+/**
+ * @brief Responsible for running queue3 once.
+ * 
+ * @param scheduler Reference to the scheduler.
+ * @param process Store worked on process into this variable.
+ * @return Std_code 
+ */
+Std_code scheduler_queue3_run(Scheduler *scheduler, Process **process);
+
+/**
+ * @brief Get scheduler current status.
+ * 
+ * @param scheduler Reference to the scheduler.
+ * @param status Store scheduler current status in this variable.
+ * @return Std_code 
+ */
+Std_code scheduler_status_code(Scheduler *scheduler, schedulerStatus *status);
+
+/**
+ * @brief Get scheduler current status msg.
+ * 
+ * @param scheduler Reference to the scheduler.
+ * @param msg Store scheduler current status msg in this variable.
+ * @return Std_code 
+ */
+Std_code scheduler_status_msg(Scheduler *scheduler, char *msg);
 
 /**
  * @brief free all space allocated by scheduler.
  * 
  * @param scheduler Address to scheduler target.
- * @return schedulerStatusMsg Current status of the operation.
+ * @return Std_code status of the operation.
  */
-schedulerStatusMsg scheduler_destroy(Scheduler *scheduler);
+Std_code scheduler_destroy(Scheduler *scheduler);
 
 #endif

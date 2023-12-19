@@ -15,6 +15,17 @@
 #include <string.h>
 #include "Queue.h"
 
+/** Defined datatypes **/
+typedef struct Queue
+{
+    uint8_t front;
+    uint8_t rear;
+    uint8_t capacity;
+    uint8_t size;
+    queueItemType **queue; // Array of length capacity
+}
+Queue;
+
 /** Functions declaration **/
 
 /**
@@ -99,7 +110,7 @@ Std_code queue_enqueue(Queue *queue, queueItemType *item)
         {
             if (ret == STD_OK)
             {
-                queue->queue[((queue->rear) % (queue->capacity))] = item;
+                queue->queue[queue->rear] = item;
                 queue->rear = (((queue->rear) + 1) % (queue->capacity));
                 queue->size++;
             }
@@ -116,7 +127,7 @@ Std_code queue_enqueue(Queue *queue, queueItemType *item)
  * @param item Return the removed item value in this variable (Can be null).
  * @return Std_code Status message.
  */
-Std_code queue_dequeue(Queue *queue, queueItemType *item)
+Std_code queue_dequeue(Queue *queue, queueItemType **item)
 {
     Std_code ret = STD_OK;
 
@@ -138,7 +149,11 @@ Std_code queue_dequeue(Queue *queue, queueItemType *item)
         {
             if (ret == STD_OK)
             {
-                queue_front(queue, item);
+                if (item != NULL)
+                {
+                    queue_front(queue, item);
+                }
+                
                 queue->front = (((queue->front) + 1) % (queue->capacity));
                 queue->size--;
             }
@@ -155,7 +170,7 @@ Std_code queue_dequeue(Queue *queue, queueItemType *item)
  * @param item Return the first item value in this variable.
  * @return Std_code Status message.
  */
-Std_code queue_front(Queue *queue, queueItemType *item)
+Std_code queue_front(Queue *queue, queueItemType **item)
 {
     Std_code ret = STD_OK;
 
@@ -177,7 +192,7 @@ Std_code queue_front(Queue *queue, queueItemType *item)
         {
             if (ret == STD_OK)
             {
-                *item = *queue->queue[((queue->front) % (queue->size))];
+                *item = queue->queue[queue->front];
             }
         }
     }
@@ -192,7 +207,7 @@ Std_code queue_front(Queue *queue, queueItemType *item)
  * @param item Return the last item value in this variable.
  * @return Std_code Status message.
  */
-Std_code queue_rear(const Queue *queue, queueItemType *item)
+Std_code queue_rear(const Queue *queue, queueItemType **item)
 {
     Std_code ret = STD_OK;
 
@@ -214,7 +229,7 @@ Std_code queue_rear(const Queue *queue, queueItemType *item)
         {
             if (ret == STD_OK)
             {
-                *item = *queue->queue[(((queue->rear) + (queue->capacity) - 1) % (queue->capacity))];
+                *item = queue->queue[(((queue->rear) + (queue->capacity) - 1) % (queue->capacity))];
             }
         }
     }
@@ -290,4 +305,22 @@ Std_code queue_destroy(Queue *queue)
     }
 
     return ret;
+}
+
+void printQueue(Queue* queue) {
+    boolean isEmpty;
+    queue_is_empty(queue, &isEmpty);
+    if (isEmpty) {
+        printf("Queue is empty\n");
+        return;
+    }
+
+    int i = queue->front;
+    do {
+        char lol[100];
+        process_to_string(queue->queue[i], lol);
+        printf("%s\n", lol);
+        i = (i + 1) % queue->capacity;
+    } while (i != ((queue->rear) % queue->capacity));
+    printf("###########\n");
 }

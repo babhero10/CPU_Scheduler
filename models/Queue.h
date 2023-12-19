@@ -22,17 +22,9 @@
 /** Macro functions **/
 
 /** Defined datatypes **/
-typedef int queueItemType;
+typedef Process queueItemType;
 
-typedef struct
-{
-    uint8_t front;
-    uint8_t rear;
-    uint8_t capacity;
-    uint8_t size;
-    queueItemType **queue; // Array of length capacity
-}
-Queue;
+typedef struct Queue Queue;
 
 /** Functions declaration **/
 
@@ -61,7 +53,7 @@ Std_code queue_enqueue(Queue *queue, queueItemType *item);
  * @param item Return the removed item value in this variable (Can be null).
  * @return Std_code Status message.
  */
-Std_code queue_dequeue(Queue *queue, queueItemType *item);
+Std_code queue_dequeue(Queue *queue, queueItemType **item);
 
 /**
  * @brief Get the first item in the queue.
@@ -70,7 +62,7 @@ Std_code queue_dequeue(Queue *queue, queueItemType *item);
  * @param item Return the first item value in this variable.
  * @return Std_code Status message.
  */
-Std_code queue_front(Queue *queue, queueItemType *item);
+Std_code queue_front(Queue *queue, queueItemType **item);
 
 /**
  * @brief Get the last item in the queue.
@@ -79,7 +71,7 @@ Std_code queue_front(Queue *queue, queueItemType *item);
  * @param item Return the last item value in this variable.
  * @return Std_code Status message.
  */
-Std_code queue_rear(const Queue *queue, queueItemType *item);
+Std_code queue_rear(const Queue *queue, queueItemType **item);
 
 /**
  * @brief Check if queue is empty or not.
@@ -107,5 +99,5 @@ Std_code queue_is_full(const Queue *queue, boolean *isFull);
  */
 Std_code queue_destroy(Queue *queue);
 
-
+void printQueue(Queue* queue);
 #endif

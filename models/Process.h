@@ -23,23 +23,18 @@
 /** Defined datatypes **/
 typedef enum 
 {
-    PROCESS_REJECTED,  // Process is rejected by scheduler.
-    PROCESS_WAITING,   // Process is in waiting queue (Default).
-    PROCESS_READY,     // Process is Ready.
-    PROCESS_RUNNING,   // Process is Running.
-    PROCESS_DONE,      // Process is terminated.
-    PROCESS_INVALID    // Invalid process status.
+    PROCESS_REJECTED,    // Process is rejected by scheduler.
+    PROCESS_NO_STATUS,   // Process isn't assign to status yet.
+    PROCESS_NEW,         // Process is being created.
+    PROCESS_WAITING,     // Process is waiting for some event to occur (such as I/O completion).
+    PROCESS_READY,       // Process is waiting to be assigned to a process.
+    PROCESS_RUNNING,     // Process is assigned to a process.
+    PROCESS_TERMINATED,  // Process is had been terminated.
+    PROCESS_INVALID      // Invalid process status.
 }
 processStatus;
 
-typedef struct Process
-{
-    char *name;
-    int pid;
-    int time;
-    processStatus status;
-}
-Process;
+typedef struct Process Process;
 
 /** Functions declaration **/
 

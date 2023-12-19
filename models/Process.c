@@ -14,6 +14,16 @@
 #include <string.h>
 #include "Process.h"
 
+/** Defined datatypes **/
+typedef struct Process
+{
+    char *name;
+    int pid;
+    int time;
+    processStatus status;
+}
+Process;
+
 /** Functions defintions **/
 
 /**
@@ -27,7 +37,7 @@
 Std_code process_init(Process **process_dist, const char *name, const int time)
 {
     Std_code ret = STD_OK;
-    static unsigned int pid = 0;
+    static unsigned int pid = 1;
 
     // Invalid argument
     if (process_dist == NULL)
@@ -49,7 +59,7 @@ Std_code process_init(Process **process_dist, const char *name, const int time)
             strcpy((*process_dist)->name, name);
             (*process_dist)->pid = pid;
             (*process_dist)->time = time;
-            (*process_dist)->status = PROCESS_WAITING;
+            (*process_dist)->status = PROCESS_NO_STATUS;
 
             pid++;
         }
@@ -134,7 +144,7 @@ Std_code process_update(Process *process, const int time_finished)
         if (time_finished >= process->time)
         {
             process->time = 0;
-            process->status = PROCESS_DONE;
+            process->status = PROCESS_TERMINATED;
         }
         else
         {
@@ -213,6 +223,7 @@ Std_code process_get_status(Process *process, processStatus *status)
     if (process == NULL || status == NULL)
     {
         ret = STD_NULL_POINTER;
+        *status = PROCESS_INVALID;
     }
     else
     {
@@ -267,6 +278,12 @@ Std_code process_status_msg(Std_code status, char *res_msg)
         case PROCESS_REJECTED:
             strcpy(temp, "Rejected");
             break;
+        case PROCESS_NO_STATUS:
+            strcpy(temp, "No status");
+            break;
+        case PROCESS_NEW:
+            strcpy(temp, "New");
+            break;
         case PROCESS_WAITING:
             strcpy(temp, "Waiting");
             break;
@@ -276,7 +293,7 @@ Std_code process_status_msg(Std_code status, char *res_msg)
         case PROCESS_RUNNING:
             strcpy(temp, "Running");
             break;
-        case PROCESS_DONE:
+        case PROCESS_TERMINATED:
             strcpy(temp, "Done");
             break;
         default:
